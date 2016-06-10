@@ -1,0 +1,29 @@
+{
+    "communities": [
+        {
+            "label": "drinks",
+            "nodes": [
+                {
+                    "label": "coffee"
+                },
+                {
+                    "label": "tea"
+                }
+            ],
+            "edges": [
+                {
+                    "target": "coffee",
+                    "source": "tea",
+                    "label": "hot"
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "target": "food",
+            "source": "drinks",
+            "label": "consume"
+        }
+    ]
+}

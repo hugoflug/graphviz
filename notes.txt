@@ -1,0 +1,9 @@
+JS library for visualizing knowledge graphs/temperature forests
+- Takes a JSON describing the KG/forest as input, visualizes KG/forest
+
+
+Communities in KG <-> Trees in forest
+
+Needed for trees:
+Different, tree-based layout of communities visualizing the "temperatures"
+Communities should be layed out horizontally/vertically
