@@ -91,8 +91,8 @@ function viz(s, jsonPath) {
                 if (s.graph.nodes(toNode.target).hidden) {
                     var targetCommunity = s.graph.nodes(toNode.target).community;
 
-                    s.graph.addEdge(s.graph.getEdgeId(fromNode, targetCommunity));
-                    s.graph.dropEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
+                    s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, targetCommunity));
+                    s.graph.addEdge({'source': fromNode, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
                 } else {
                     s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, toNode.target));
                     s.graph.addEdge({'source': fromNode, 'target': toNode.target, 'id': fromNode + "-" + toNode.target, 'color': "#0f0"});
