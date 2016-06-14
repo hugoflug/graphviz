@@ -11,6 +11,7 @@ function viz(s, jsonPath) {
             setTimeout(function() { s.stopForceAtlas2(); }, 1000);
 
             clickCollapse(s);
+            colorEdges(s);
         }
     );
 
@@ -44,6 +45,18 @@ function viz(s, jsonPath) {
         return communities;
     }
 
+    function colorEdges(s) {
+        s.graph.edges().forEach(function(edge) {
+            var sourceNode = s.graph.nodes(edge.source);
+            var targetNode = s.graph.nodes(edge.target);
+
+            if (sourceNode.community !== targetNode.community) {
+                edge.color = '#0f0';
+                s.refresh();
+            }
+        });
+    }
+
     function collapse(s, communityInfo, node) {
 
     }
@@ -54,8 +67,6 @@ function viz(s, jsonPath) {
 
     function clickCollapse(s) {
         var info = getCommunityInfo(s)
-
-        console.log(info)
 
         s.bind('clickNode', function(e) {
             //locate intra-community nodes, color them a different color
