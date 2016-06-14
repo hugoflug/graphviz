@@ -1,5 +1,5 @@
 sigma.classes.graph.addMethod('getEdgeId', function(from, to) {
-    return this.allNeighborsIndex[from][to];
+    return Object.keys(this.allNeighborsIndex[from][to])[0];
 });
 
 function viz(s, jsonPath) {
@@ -65,22 +65,40 @@ function viz(s, jsonPath) {
         var community = communityInfo[clickedNode.community]
 
         for (var fromNode in community) {
-            for (var toNode in community[fromNode]) {
-                if (s.graph.nodes(toNode).hidden) {
-                    var targetCommunity = s.graph.nodes(toNode).community;
+            for (var i = 0; i < community[fromNode].length; i++) {
+                var toNode = community[fromNode][i];
+
+                if (s.graph.nodes(toNode.target).hidden) {
+                    var targetCommunity = s.graph.nodes(toNode.target).community;
 
                     s.graph.dropEdge(s.graph.getEdgeId(fromNode, targetCommunity));
-                    s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': communityNode + "-" + targetCommunity});
+                    s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
                 } else {
-                    s.graph.dropEdge(s.graph.getEdgeId(fromNode, toNode));
-                    s.graph.addEdge({'source': fromNode, 'target': toNode, 'id': fromNode + "-" + toNode});
+                    s.graph.dropEdge(s.graph.getEdgeId(fromNode, toNode.target));
+                    s.graph.addEdge({'source': clickedNode.community, 'target': toNode.target, 'id': clickedNode.community + "-" + toNode.target, 'color': "#0f0"});
                 }
             } 
         }
     }
 
     function uncollapse(s, communityInfo, clickedNode) {
-        
+        var community = communityInfo[clickedNode.community]
+
+        for (var fromNode in community) {
+            for (var i = 0; i < community[fromNode].length; i++) {
+                var toNode = community[fromNode][i];
+
+                if (s.graph.nodes(toNode.target).hidden) {
+                    var targetCommunity = s.graph.nodes(toNode.target).community;
+
+                    s.graph.addEdge(s.graph.getEdgeId(fromNode, targetCommunity));
+                    s.graph.dropEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
+                } else {
+                    s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, toNode.target));
+                    s.graph.addEdge({'source': fromNode, 'target': toNode.target, 'id': fromNode + "-" + toNode.target, 'color': "#0f0"});
+                }
+            } 
+        }        
     }
 
     function clickCollapse(s) {
@@ -106,6 +124,9 @@ function viz(s, jsonPath) {
                         n.hidden = true;
                     }
                 });
+
+                collapse(s, info, clickedNode);
+                
             } else if (clickedNode.communityNode === true) {
                 clickedNode.hidden = true;
 
@@ -114,6 +135,8 @@ function viz(s, jsonPath) {
                         n.hidden = false;
                     }
                 });
+
+                uncollapse(s, info, clickedNode);
             }
 
             //e.data.node.hidden = true;
