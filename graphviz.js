@@ -1,3 +1,7 @@
+sigma.classes.graph.addMethod('getEdgeId', function(from, to) {
+    return this.allNeighborsIndex[from][to];
+});
+
 function viz(s, jsonPath) {
 
     // convert json at jsonPath to sigma json format?
@@ -57,11 +61,25 @@ function viz(s, jsonPath) {
         });
     }
 
-    function collapse(s, communityInfo, node) {
+    function collapse(s, communityInfo, clickedNode) {
+        var community = communityInfo[clickedNode.community]
 
+        for (var fromNode in community) {
+            for (var toNode in community[fromNode]) {
+                if (s.graph.nodes(toNode).hidden) {
+                    var targetCommunity = s.graph.nodes(toNode).community;
+
+                    s.graph.dropEdge(s.graph.getEdgeId(fromNode, targetCommunity));
+                    s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': communityNode + "-" + targetCommunity});
+                } else {
+                    s.graph.dropEdge(s.graph.getEdgeId(fromNode, toNode));
+                    s.graph.addEdge({'source': fromNode, 'target': toNode, 'id': fromNode + "-" + toNode});
+                }
+            } 
+        }
     }
 
-    function uncollapse(s, communityInfo, node) {
+    function uncollapse(s, communityInfo, clickedNode) {
         
     }
 
