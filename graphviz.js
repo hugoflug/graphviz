@@ -132,8 +132,6 @@ function viz(s, jsonPath) {
             if (clickedNode.communityNode === false) {
                 s.graph.nodes().forEach(function(n) {
                     if (n.communityNode && n.label == clickedNode.community) {
-                        console.log(n);
-
                         n.x = clickedNode.x;
                         n.y = clickedNode.y;
 
