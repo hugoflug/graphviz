@@ -139,9 +139,6 @@ function viz(s, jsonPath) {
                 uncollapse(s, info, clickedNode);
             }
 
-            //e.data.node.hidden = true;
-            //console.log(e);
-
             s.refresh()
         });
     }
