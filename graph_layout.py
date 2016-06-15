@@ -17,7 +17,7 @@ def graph_layout(in_json):
         node["communityNode"] = False
         node["id"] = node["label"]
 
-        communities.append(node["community"])
+        communities.add(node["community"])
 
     for community in communities:
         out_json["nodes"].append({
@@ -29,7 +29,8 @@ def graph_layout(in_json):
             "communityNode": True,
             "community": community,
             "label": community,
-            "id": community
+            "id": community,
+            "hidden": True
         })
 
     for edge in out_json["edges"]:
@@ -40,4 +41,4 @@ def graph_layout(in_json):
 if __name__ == "__main__":
     in_json = json.load(open(sys.argv[1]))
     out_json = graph_layout(in_json)
-    json.dump(out_json, open(out_json, 'w'))
+    json.dump(out_json, sys.stdout, indent=4, sort_keys=True)
