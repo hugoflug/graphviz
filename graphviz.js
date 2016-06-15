@@ -1,5 +1,10 @@
 sigma.classes.graph.addMethod('getEdgeId', function(from, to) {
-    return Object.keys(this.allNeighborsIndex[from][to])[0];
+    var allEdges = this.allNeighborsIndex[from][to];
+    if (allEdges === undefined) {
+        return undefined;
+    } else {
+        return Object.keys(allEdges)[0];
+    }
 });
 
 function viz(s, jsonPath) {
@@ -12,7 +17,7 @@ function viz(s, jsonPath) {
         s,
         function(s) {
             s.startForceAtlas2({worker: true, barnesHutOptimize: false});
-            setTimeout(function() { s.stopForceAtlas2(); }, 1000);
+            setTimeout(function() { s.stopForceAtlas2(); positionTreeNodes(s); }, 5000);
 
             clickCollapse(s);
             colorEdges(s);
@@ -70,9 +75,11 @@ function viz(s, jsonPath) {
 
                 if (s.graph.nodes(toNode.target).hidden) {
                     var targetCommunity = s.graph.nodes(toNode.target).community;
-
                     s.graph.dropEdge(s.graph.getEdgeId(fromNode, targetCommunity));
-                    s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
+
+                    if (s.graph.getEdgeId(clickedNode.community, targetCommunity) === undefined) {
+                        s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
+                    }
                 } else {
                     s.graph.dropEdge(s.graph.getEdgeId(fromNode, toNode.target));
                     s.graph.addEdge({'source': clickedNode.community, 'target': toNode.target, 'id': clickedNode.community + "-" + toNode.target, 'color': "#0f0"});
@@ -91,14 +98,26 @@ function viz(s, jsonPath) {
                 if (s.graph.nodes(toNode.target).hidden) {
                     var targetCommunity = s.graph.nodes(toNode.target).community;
 
-                    s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, targetCommunity));
-                    s.graph.addEdge({'source': fromNode, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
+                    if (s.graph.getEdgeId(clickedNode.community, targetCommunity) !== undefined) {
+                        s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, targetCommunity));
+                    }
+                    s.graph.addEdge({'source': fromNode, 'target': targetCommunity, 'id': fromNode + "-" + targetCommunity, 'color': "#0f0"});
                 } else {
                     s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, toNode.target));
                     s.graph.addEdge({'source': fromNode, 'target': toNode.target, 'id': fromNode + "-" + toNode.target, 'color': "#0f0"});
                 }
             } 
         }        
+    }
+
+    function positionTreeNodes(s) {
+        s.graph.nodes().forEach(function(n) {
+            if (n.value !== undefined) {
+                n.y = n.value*20; //TODO: smarter conversion
+            }
+        });
+
+        s.refresh();
     }
 
     function clickCollapse(s) {
