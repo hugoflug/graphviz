@@ -34,12 +34,18 @@ function viz(s, jsonPath) {
             if (sourceNode.community !== targetNode.community) {
                 if (sourceNode.community !== undefined) {
                     if (communities[sourceNode.community] === undefined) {
-                        var community = communities[sourceNode.community] = {};
+                        communities[sourceNode.community] = {};
                     }
 
+                    var targets;
+
                     if (communities[sourceNode.community][source] === undefined) {
-                        var targets = communities[sourceNode.community][source] = [];
+                        communities[sourceNode.community][source] = [];
                     }
+
+                    targets = communities[sourceNode.community][source];
+
+                    console.log(targetNode);
 
                     targets.push({'target': target, 'community': targetNode.community})
                 }

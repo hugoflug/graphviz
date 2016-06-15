@@ -17,7 +17,8 @@ def graph_layout(in_json):
         node["communityNode"] = False
         node["id"] = node["label"]
 
-        communities.add(node["community"])
+        if "community" in node:
+            communities.add(node["community"])
 
     for community in communities:
         out_json["nodes"].append({

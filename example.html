@@ -14,7 +14,7 @@
   <script src="sigma/plugins/sigma.parsers.json.min.js"></script>
   <script src="sigma/plugins/sigma.parsers.gexf.min.js"></script>
   <script src="sigma/plugins/sigma.layout.forceAtlas2.min.js"></script>
-  <script src="sigma/plugins/sigma.renderers.edgeLabels.min.js"></script>
+
   <script src="graphviz.js"></script>
   <script>
     var s = new sigma({                                                                                                          
@@ -26,7 +26,8 @@
         }                                                                  
     }); 
 
-    viz(s, 'data/test_internal.json');
+    //viz(s, 'data/test_internal.json');
+    viz(s, 'data/coffee_communities_internal.json');
 
   </script>
 </body>
