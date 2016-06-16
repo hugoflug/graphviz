@@ -71,6 +71,18 @@ function viz(s, jsonPath) {
     }
 
     function collapse(s, communityInfo, clickedNode) {
+        s.graph.nodes().forEach(function(n) {
+            if (n.communityNode && n.id == clickedNode.community) {
+                n.x = clickedNode.x;
+                n.y = clickedNode.y;
+
+                n.hidden = false;
+            }
+            if (!n.communityNode && n.community == clickedNode.community) {
+                n.hidden = true;
+            }
+        });
+
         var community = communityInfo[clickedNode.community]
 
         for (var fromNode in community) {
@@ -101,6 +113,14 @@ function viz(s, jsonPath) {
     }
 
     function uncollapse(s, communityInfo, clickedNode) {
+        clickedNode.hidden = true;
+
+        s.graph.nodes().forEach(function(n) {
+            if (!n.communityNode && n.community == clickedNode.id) {
+                n.hidden = false;
+            }
+        });
+
         var community = communityInfo[clickedNode.community]
 
         for (var fromNode in community) {
@@ -149,29 +169,8 @@ function viz(s, jsonPath) {
             clickedNode = e.data.node;
 
             if (clickedNode.communityNode === false) {
-                s.graph.nodes().forEach(function(n) {
-                    if (n.communityNode && n.id == clickedNode.community) {
-                        n.x = clickedNode.x;
-                        n.y = clickedNode.y;
-
-                        n.hidden = false;
-                    }
-                    if (!n.communityNode && n.community == clickedNode.community) {
-                        n.hidden = true;
-                    }
-                });
-
-                collapse(s, info, clickedNode);
-                
+                collapse(s, info, clickedNode);   
             } else if (clickedNode.communityNode === true) {
-                clickedNode.hidden = true;
-
-                s.graph.nodes().forEach(function(n) {
-                    if (!n.communityNode && n.community == clickedNode.id) {
-                        n.hidden = false;
-                    }
-                });
-
                 uncollapse(s, info, clickedNode);
             }
 
