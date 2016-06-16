@@ -17,7 +17,7 @@ function viz(s, jsonPath) {
         s,
         function(s) {
             s.startForceAtlas2({worker: true, barnesHutOptimize: false});
-            setTimeout(function() { s.stopForceAtlas2(); positionTreeNodes(s); }, 5000);
+            setTimeout(function() { s.stopForceAtlas2(); positionTreeNodes(s); }, 15000);
 
             clickCollapse(s);
             colorEdges(s);
@@ -44,8 +44,6 @@ function viz(s, jsonPath) {
                     }
 
                     targets = communities[sourceNode.community][source];
-
-                    console.log(targetNode);
 
                     targets.push({'target': target, 'community': targetNode.community})
                 }
@@ -81,14 +79,22 @@ function viz(s, jsonPath) {
 
                 if (s.graph.nodes(toNode.target).hidden) {
                     var targetCommunity = s.graph.nodes(toNode.target).community;
-                    s.graph.dropEdge(s.graph.getEdgeId(fromNode, targetCommunity));
+
+                    if (s.graph.getEdgeId(fromNode, targetCommunity) !== undefined) {
+                        s.graph.dropEdge(s.graph.getEdgeId(fromNode, targetCommunity));
+                    }
 
                     if (s.graph.getEdgeId(clickedNode.community, targetCommunity) === undefined) {
                         s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
                     }
                 } else {
-                    s.graph.dropEdge(s.graph.getEdgeId(fromNode, toNode.target));
-                    s.graph.addEdge({'source': clickedNode.community, 'target': toNode.target, 'id': clickedNode.community + "-" + toNode.target, 'color': "#0f0"});
+                    if (s.graph.getEdgeId(fromNode, toNode.target) !== undefined) {
+                        s.graph.dropEdge(s.graph.getEdgeId(fromNode, toNode.target));
+                    }
+
+                    if (s.graph.getEdgeId(clickedNode.community, toNode.target) === undefined) {
+                        s.graph.addEdge({'source': clickedNode.community, 'target': toNode.target, 'id': clickedNode.community + "-" + toNode.target, 'color': "#0f0"});
+                    }
                 }
             } 
         }
@@ -107,10 +113,17 @@ function viz(s, jsonPath) {
                     if (s.graph.getEdgeId(clickedNode.community, targetCommunity) !== undefined) {
                         s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, targetCommunity));
                     }
-                    s.graph.addEdge({'source': fromNode, 'target': targetCommunity, 'id': fromNode + "-" + targetCommunity, 'color': "#0f0"});
+                    if (s.graph.getEdgeId(fromNode, targetCommunity) === undefined) {
+                        s.graph.addEdge({'source': fromNode, 'target': targetCommunity, 'id': fromNode + "-" + targetCommunity, 'color': "#0f0"});
+                    }
                 } else {
-                    s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, toNode.target));
-                    s.graph.addEdge({'source': fromNode, 'target': toNode.target, 'id': fromNode + "-" + toNode.target, 'color': "#0f0"});
+                    if (s.graph.getEdgeId(clickedNode.community, toNode.target) === undefined) {
+                        s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, toNode.target));
+                    }
+
+                    if (s.graph.getEdgeId(fromNode, toNode.target) === undefined) {
+                        s.graph.addEdge({'source': fromNode, 'target': toNode.target, 'id': fromNode + "-" + toNode.target, 'color': "#0f0"});
+                    }
                 }
             } 
         }        
@@ -137,7 +150,7 @@ function viz(s, jsonPath) {
 
             if (clickedNode.communityNode === false) {
                 s.graph.nodes().forEach(function(n) {
-                    if (n.communityNode && n.label == clickedNode.community) {
+                    if (n.communityNode && n.id == clickedNode.community) {
                         n.x = clickedNode.x;
                         n.y = clickedNode.y;
 
@@ -154,7 +167,7 @@ function viz(s, jsonPath) {
                 clickedNode.hidden = true;
 
                 s.graph.nodes().forEach(function(n) {
-                    if (!n.communityNode && n.community == clickedNode.label) {
+                    if (!n.communityNode && n.community == clickedNode.id) {
                         n.hidden = false;
                     }
                 });
