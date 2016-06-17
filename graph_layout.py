@@ -21,7 +21,7 @@ def graph_layout(in_json):
         node["size"] = 1
         node["communityNode"] = False
         node["id"] = node["label"]
-        node["hidden"] = True
+        node["hidden"] = False
 
         if "community" in node and node["community"] not in communities:
             community_colors[node["community"]] = "rgb(" + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + ")"
@@ -41,7 +41,7 @@ def graph_layout(in_json):
             "community": "comm_" + community,
             "label": community,
             "id": "comm_" + community,
-            "hidden": False
+            "hidden": True
         })
 
     for edge in out_json["edges"]:

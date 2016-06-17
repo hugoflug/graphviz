@@ -7,6 +7,8 @@ sigma.classes.graph.addMethod('getEdgeId', function(from, to) {
     }
 });
 
+var defaultColor = "#ddd"
+
 function viz(s, jsonPath) {
 
     // convert json at jsonPath to sigma json format?
@@ -18,6 +20,7 @@ function viz(s, jsonPath) {
         function(s) {
             //s.startForceAtlas2({worker: true, barnesHutOptimize: false});
             //setTimeout(function() { s.stopForceAtlas2(); positionTreeNodes(s); }, 15000);
+
 
             clickCollapse(s);
             colorEdges(s);
@@ -64,10 +67,11 @@ function viz(s, jsonPath) {
             var targetNode = s.graph.nodes(edge.target);
 
             if (sourceNode.community !== targetNode.community) {
-                edge.color = '#0f0';
-                s.refresh();
+                edge.color = defaultColor;
             }
         });
+
+        s.refresh();
     }
 
     function collapse(s, communityInfo, clickedNode) {
@@ -97,7 +101,7 @@ function viz(s, jsonPath) {
                     }
 
                     if (s.graph.getEdgeId(clickedNode.community, targetCommunity) === undefined) {
-                        s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': "#0f0"});
+                        s.graph.addEdge({'source': clickedNode.community, 'target': targetCommunity, 'id': clickedNode.community + "-" + targetCommunity, 'color': defaultColor});
                     }
                 } else {
                     if (s.graph.getEdgeId(fromNode, toNode.target) !== undefined) {
@@ -105,7 +109,7 @@ function viz(s, jsonPath) {
                     }
 
                     if (s.graph.getEdgeId(clickedNode.community, toNode.target) === undefined) {
-                        s.graph.addEdge({'source': clickedNode.community, 'target': toNode.target, 'id': clickedNode.community + "-" + toNode.target, 'color': "#0f0"});
+                        s.graph.addEdge({'source': clickedNode.community, 'target': toNode.target, 'id': clickedNode.community + "-" + toNode.target, 'color': defaultColor});
                     }
                 }
             } 
@@ -134,7 +138,7 @@ function viz(s, jsonPath) {
                         s.graph.dropEdge(s.graph.getEdgeId(clickedNode.community, targetCommunity));
                     }
                     if (s.graph.getEdgeId(fromNode, targetCommunity) === undefined) {
-                        s.graph.addEdge({'source': fromNode, 'target': targetCommunity, 'id': fromNode + "-" + targetCommunity, 'color': "#0f0"});
+                        s.graph.addEdge({'source': fromNode, 'target': targetCommunity, 'id': fromNode + "-" + targetCommunity, 'color': defaultColor});
                     }
                 } else {
                     if (s.graph.getEdgeId(clickedNode.community, toNode.target) === undefined) {
@@ -142,7 +146,7 @@ function viz(s, jsonPath) {
                     }
 
                     if (s.graph.getEdgeId(fromNode, toNode.target) === undefined) {
-                        s.graph.addEdge({'source': fromNode, 'target': toNode.target, 'id': fromNode + "-" + toNode.target, 'color': "#0f0"});
+                        s.graph.addEdge({'source': fromNode, 'target': toNode.target, 'id': fromNode + "-" + toNode.target, 'color': defaultColor});
                     }
                 }
             } 
