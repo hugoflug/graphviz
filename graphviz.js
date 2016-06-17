@@ -24,6 +24,10 @@ function viz(s, jsonPath) {
 
             clickCollapse(s);
             colorEdges(s);
+
+            s.settings({
+                'labelThreshold': 6
+            })
         }
     );
 

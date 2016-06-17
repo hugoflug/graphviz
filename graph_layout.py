@@ -36,7 +36,7 @@ def graph_layout(in_json):
             "y": random.random(),
             "z": random.random(),
             "color": community_colors[community],
-            "size": 2,
+            "size": 3,
             "communityNode": True,
             "community": "comm_" + community,
             "label": community,
