@@ -2,24 +2,32 @@ import sys
 import json
 import copy
 import random
+import networkx as nx
+from networkx.drawing.nx_agraph import graphviz_layout
+import force_atlas
 
 def graph_layout(in_json):
     out_json = copy.deepcopy(in_json)
 
     communities = set()
+    community_colors = {}
+
+    positions = calculate_positions(in_json)
 
     for node in out_json["nodes"]:
-        node["x"] = random.random()
-        node["y"] = random.random()
+        node["x"] = float(positions[node["label"]][0])
+        node["y"] = float(positions[node["label"]][1])
         node["z"] = random.random()
-        node["color"] = "rgb(130,51,3)"
         node["size"] = 1
         node["communityNode"] = False
         node["id"] = node["label"]
+        node["hidden"] = True
 
-        if "community" in node:
-                    communities.add(node["community"])
+        if "community" in node and node["community"] not in communities:
+            community_colors[node["community"]] = "rgb(" + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + ")"
+            communities.add(node["community"])
 
+        node["color"] = community_colors[node["community"]]
         node["community"] = "comm_" + node["community"]
 
     for community in communities:
@@ -27,19 +35,30 @@ def graph_layout(in_json):
             "x": random.random(),
             "y": random.random(),
             "z": random.random(),
-            "color": "rgb(130,51,3)",
-            "size": 1,
+            "color": community_colors[community],
+            "size": 2,
             "communityNode": True,
             "community": "comm_" + community,
             "label": community,
             "id": "comm_" + community,
-            "hidden": True
+            "hidden": False
         })
 
     for edge in out_json["edges"]:
         edge["id"] = edge["source"] + "-" + edge["target"]
 
     return out_json
+
+def calculate_positions(in_json):
+    g = nx.Graph()
+
+    for node in in_json["nodes"]:
+        g.add_node(node["label"])
+
+    for edge in in_json["edges"]:
+        g.add_edge(edge["source"], edge["target"])
+
+    return force_atlas.forceatlas2_layout(g, iterations=1000, nohubs=False) 
 
 if __name__ == "__main__":
     in_json = json.load(open(sys.argv[1]))

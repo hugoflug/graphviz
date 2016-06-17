@@ -16,8 +16,8 @@ function viz(s, jsonPath) {
         jsonPath,
         s,
         function(s) {
-            s.startForceAtlas2({worker: true, barnesHutOptimize: false});
-            setTimeout(function() { s.stopForceAtlas2(); positionTreeNodes(s); }, 15000);
+            //s.startForceAtlas2({worker: true, barnesHutOptimize: false});
+            //setTimeout(function() { s.stopForceAtlas2(); positionTreeNodes(s); }, 15000);
 
             clickCollapse(s);
             colorEdges(s);
