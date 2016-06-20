@@ -4,12 +4,17 @@ import copy
 import random
 from networkx.drawing.nx_agraph import graphviz_layout
 
-TREE_X_DISTANCE = 1.0
+TREE_X_DISTANCE = 0.5
 
-def add_subtree(subtree, community, out_json, color, x, depth=0):
-    for i, child in enumerate(subtree["children"], 1):
+def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0):
+    if len(subtree["children"]) > 0:
+        new_tree_x_distance = tree_x_distance/len(subtree["children"])
+
+    for i, child in enumerate(subtree["children"], 0):
+        child_x = x + new_tree_x_distance*i - new_tree_x_distance/2
+
         out_json["nodes"].append({
-            "x": x,
+            "x": child_x,
             "y": child["value"],
             "z": random.random(),
             "label": child["label"],
@@ -26,7 +31,8 @@ def add_subtree(subtree, community, out_json, color, x, depth=0):
             "target": child["label"],
             "id": subtree["label"] + "-" + child["label"]
         })
-        add_subtree(child, community, out_json, color, x + (TREE_X_DISTANCE/(len(subtree["children"]) + 1))*i, depth+1)
+
+        add_subtree(child, community, out_json, color, child_x, new_tree_x_distance, depth+1)
 
 def tree_layout(in_json):
     out_json = {
@@ -34,9 +40,11 @@ def tree_layout(in_json):
         'nodes': []
     }
 
-    x_position = TREE_X_DISTANCE/2
+    x_position = 1.0
 
     for tree in in_json["trees"]:
+        x_position += TREE_X_DISTANCE
+
         community_color = "rgb(" + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + ")"
 
         out_json["nodes"].append({
@@ -51,7 +59,8 @@ def tree_layout(in_json):
             "size": 1,
             "hidden": False
         })
-        add_subtree(tree["root"], tree["label"], out_json, community_color, x_position)
+        new_tree_x_distance = TREE_X_DISTANCE/len(tree["root"]["children"])
+        add_subtree(tree["root"], tree["label"], out_json, community_color, x_position, new_tree_x_distance)
 
         #todo: calculate position
 
