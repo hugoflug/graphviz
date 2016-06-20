@@ -4,15 +4,21 @@ import copy
 import random
 from networkx.drawing.nx_agraph import graphviz_layout
 
-TREE_Y_DISTANCE = 50
+TREE_X_DISTANCE = 1.0
 
-def add_subtree(subtree, community, out_json, color, y, depth=0):
-    for child in subtree["children"]:
+def add_subtree(subtree, community, out_json, color, x, depth=0):
+    for i, child in enumerate(subtree["children"], 1):
         out_json["nodes"].append({
+            "x": x,
+            "y": child["value"],
+            "z": random.random(),
             "label": child["label"],
             "id": child["label"],
-            "value": child["value"],
-            "community": "comm_" + community
+            "community": "comm_" + community,
+            "communityNode": False,
+            "color": "rgb(100, 0, 0)",
+            "size": 1,
+            "hidden": False
         })
 
         out_json["edges"].append({
@@ -20,7 +26,7 @@ def add_subtree(subtree, community, out_json, color, y, depth=0):
             "target": child["label"],
             "id": subtree["label"] + "-" + child["label"]
         })
-        add_subtree(child, community, out_json, color, y, depth+1)
+        add_subtree(child, community, out_json, color, x + (TREE_X_DISTANCE/(len(subtree["children"]) + 1))*i, depth+1)
 
 def tree_layout(in_json):
     out_json = {
@@ -28,26 +34,41 @@ def tree_layout(in_json):
         'nodes': []
     }
 
-    y_position = 0
+    x_position = TREE_X_DISTANCE/2
 
     for tree in in_json["trees"]:
         community_color = "rgb(" + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + ")"
 
-        add_subtree(tree, tree["label"], out_json, community_color, y)
+        out_json["nodes"].append({
+            "x": x_position,
+            "y": tree["root"]["value"],
+            "z": random.random(),
+            "label": tree["root"]["label"],
+            "id": tree["root"]["label"],
+            "community": "comm_" + tree["label"],
+            "communityNode": False,
+            "color": "rgb(100, 0, 0)",
+            "size": 1,
+            "hidden": False
+        })
+        add_subtree(tree["root"], tree["label"], out_json, community_color, x_position)
 
         #todo: calculate position
 
         out_json["nodes"].append({
+            "x": random.random(),
+            "y": random.random(),
+            "z": random.random(),
             "color": community_color,
             "size": 3,
             "communityNode": True,
-            "community": "comm_" + tree["community"],
-            "label": tree["community"],
-            "id": "comm_" + tree["community"],
+            "community": "comm_" + tree["label"],
+            "label": tree["label"],
+            "id": "comm_" + tree["label"],
             "hidden": True
         })
 
-        y_position += TREE_Y_DISTANCE
+        x_position += TREE_X_DISTANCE
 
     return out_json
 
