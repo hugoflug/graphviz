@@ -43,8 +43,6 @@ def tree_layout(in_json):
     x_position = 1.0
 
     for tree in in_json["trees"]:
-        x_position += TREE_X_DISTANCE
-
         community_color = "rgb(" + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + ")"
 
         out_json["nodes"].append({
@@ -69,7 +67,7 @@ def tree_layout(in_json):
             "y": random.random(),
             "z": random.random(),
             "color": community_color,
-            "size": 3,
+            "size": 2,
             "communityNode": True,
             "community": "comm_" + tree["label"],
             "label": tree["label"],
@@ -78,6 +76,13 @@ def tree_layout(in_json):
         })
 
         x_position += TREE_X_DISTANCE
+
+    for edge in in_json["edges"]:
+        out_json["edges"].append({
+            "source": edge["source"],
+            "target": edge["target"],
+            "id": edge["source"] + "-" + edge["target"]
+        })
 
     return out_json
 
