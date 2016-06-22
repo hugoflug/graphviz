@@ -9,10 +9,13 @@ sigma.classes.graph.addMethod('getEdgeId', function(from, to) {
 
 var defaultColor = "#ddd"
 
-function viz(s, jsonPath) {
-
+function viz(s, jsonPath, config) {
     // convert json at jsonPath to sigma json format?
     // OR add custom sigma parser
+
+    if (config === undefined) {
+        config = {};
+    }
 
     sigma.parsers.json(
         jsonPath,
@@ -26,8 +29,8 @@ function viz(s, jsonPath) {
             colorEdges(s);
 
             s.settings({
-                'labelThreshold': 6
-            })
+                'labelThreshold': config["labelThreshold"] !== undefined ? config["labelThreshold"] : 6
+            });
         }
     );
 

@@ -6,7 +6,7 @@ from networkx.drawing.nx_agraph import graphviz_layout
 
 TREE_X_DISTANCE = 0.5
 
-def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0):
+def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0):http://netdot.co/2015/03/09/flask-on-iis/
     if len(subtree["children"]) > 0:
         new_tree_x_distance = tree_x_distance/len(subtree["children"])
 
@@ -17,11 +17,11 @@ def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0
             "x": child_x,
             "y": child["value"],
             "z": random.random(),
-            "label": child["label"],
+            "label": child["label"] + " (" + str(child["value"]) + ")",
             "id": child["label"],
             "community": "comm_" + community,
             "communityNode": False,
-            "color": "rgb(100, 0, 0)",
+            "color": color,
             "size": 1,
             "hidden": False
         })
@@ -45,23 +45,23 @@ def tree_layout(in_json):
     for tree in in_json["trees"]:
         community_color = "rgb(" + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + ")"
 
+        # add tree root
         out_json["nodes"].append({
             "x": x_position,
             "y": tree["root"]["value"],
             "z": random.random(),
-            "label": tree["root"]["label"],
+            "label": tree["root"]["label"] + " (" + str(tree["root"]["value"]) + ")",
             "id": tree["root"]["label"],
             "community": "comm_" + tree["label"],
             "communityNode": False,
-            "color": "rgb(100, 0, 0)",
+            "color": community_color,
             "size": 1,
             "hidden": False
         })
         new_tree_x_distance = TREE_X_DISTANCE/len(tree["root"]["children"])
         add_subtree(tree["root"], tree["label"], out_json, community_color, x_position, new_tree_x_distance)
 
-        #todo: calculate position
-
+        # add community node
         out_json["nodes"].append({
             "x": random.random(),
             "y": random.random(),
