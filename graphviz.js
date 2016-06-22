@@ -22,7 +22,7 @@ function viz(s, jsonPath, config) {
         s,
         function(s) {
             //s.startForceAtlas2({worker: true, barnesHutOptimize: false});
-            //setTimeout(function() { s.stopForceAtlas2(); positionTreeNodes(s); }, 15000);
+            //setTimeout(function() { s.stopForceAtlas2();  }, 15000);
 
 
             clickCollapse(s);
@@ -82,18 +82,23 @@ function viz(s, jsonPath, config) {
     }
 
     function collapse(s, communityInfo, clickedNode) {
+        // handle nodes 
         s.graph.nodes().forEach(function(n) {
+            // show community node and move to clicked node position
             if (n.communityNode && n.id == clickedNode.community) {
                 n.x = clickedNode.x;
                 n.y = clickedNode.y;
 
                 n.hidden = false;
             }
+            // hide non-community nodes
             if (!n.communityNode && n.community == clickedNode.community) {
                 n.hidden = true;
             }
         });
 
+
+        // handle edges
         var community = communityInfo[clickedNode.community]
 
         for (var fromNode in community) {
@@ -158,16 +163,6 @@ function viz(s, jsonPath, config) {
                 }
             } 
         }        
-    }
-
-    function positionTreeNodes(s) {
-        s.graph.nodes().forEach(function(n) {
-            if (n.value !== undefined) {
-                n.y = n.value*20; //TODO: smarter conversion
-            }
-        });
-
-        s.refresh();
     }
 
     function clickCollapse(s) {
