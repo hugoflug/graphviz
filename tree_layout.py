@@ -6,7 +6,7 @@ from networkx.drawing.nx_agraph import graphviz_layout
 
 TREE_X_DISTANCE = 0.5
 
-def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0):http://netdot.co/2015/03/09/flask-on-iis/
+def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0):
     if len(subtree["children"]) > 0:
         new_tree_x_distance = tree_x_distance/len(subtree["children"])
 
