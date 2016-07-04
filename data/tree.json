@@ -1,0 +1,180 @@
+{
+    "trees": [
+        {
+            "label": "A",
+            "root": {
+                "label": "B",
+                "value": 0.1,
+                "children": [
+                    {
+                        "label": "C",
+                        "value": 0.2,
+                        "children": [
+                            {
+                                "label": "D",
+                                "value": 0.3,
+                                "children": []
+                            },
+                            {
+                                "label": "E",
+                                "value": 0.5,
+                                "children": [
+                                    {
+                                        "label": "F",
+                                        "value": 0.53,
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "label": "CC",
+                        "value": 0.17,
+                        "children": []
+                    }
+                ]
+            }
+        },
+        {
+            "label": "AA",
+            "root": {
+                "label": "BB",
+                "value": 0.15,
+                "children": [
+                    {
+                        "label": "CCD",
+                        "value": 0.25,
+                        "children": [
+                            {
+                                "label": "DD",
+                                "value": 0.27,
+                                "children": []
+                            },
+                            {
+                                "label": "EE",
+                                "value": 0.48,
+                                "children": [
+                                    {
+                                        "label": "FF",
+                                        "value": 0.53,
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "label": "CCC",
+                        "value": 0.2,
+                        "children": [
+                            {
+                                "label": "VVV",
+                                "value": 0.21,
+                                "children": []
+                            },
+                            {
+                                "label": "RRR",
+                                "value": 0.21,
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "label": "AA+",
+            "root": {
+                "label": "BB+",
+                "value": 0.1,
+                "children": [
+                    {
+                        "label": "CCD+",
+                        "value": 0.27,
+                        "children": [
+                            {
+                                "label": "EE+",
+                                "value": 0.35,
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "label": "CCC+",
+                        "value": 0.23,
+                        "children": [
+                            {
+                                "label": "VVV+",
+                                "value": 0.28,
+                                "children": []
+                            },
+                            {
+                                "label": "RRR+",
+                                "value": 0.24,
+                                "children": [
+                                    {
+                                        "label": "foobar",
+                                        "value": 0.4,
+                                        "children": []  
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+
+    "edges": [
+        {
+            "source": "E",
+            "target": "EE"
+        },
+        {
+            "source": "B",
+            "target": "BB"
+        },
+        {
+            "source": "C",
+            "target": "CCD"
+        },
+        {
+            "source": "D",
+            "target": "DD"
+        },
+        {
+            "source": "CC",
+            "target": "CCC"
+        },
+        {
+            "source": "BB",
+            "target": "BB+"
+        },
+        {
+            "source": "CCC",
+            "target": "CCC+"
+        },
+        {
+            "source": "CCD",
+            "target": "CCD+"
+        },
+        {
+            "source": "EE",
+            "target": "EE+"
+        },
+        {
+            "source": "VVV",
+            "target": "VVV+"
+        },
+        {
+            "source": "RRR",
+            "target": "RRR+"
+        },
+        {
+            "source": "F",
+            "target": "FF"
+        }
+    ]
+}
