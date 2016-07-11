@@ -204,6 +204,12 @@ function viz(s, jsonPath, config) {
                     var descNode = s.graph.nodes(descendant);
                     descNode.hidden = !hidden; 
                 }
+
+                if (!hidden) {
+                    clickedNode.size = 2;
+                } else {
+                    clickedNode.size = 1;
+                }
             }
 
             s.refresh()
