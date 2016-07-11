@@ -195,13 +195,15 @@ function viz(s, jsonPath, config) {
 
             var clickedNode = e.data.node;
 
-            var hidden = s.graph.nodes(clickedNode.descendants[0]).hidden;
+            if (clickedNode.descendants.length > 0) {
+                var hidden = s.graph.nodes(clickedNode.descendants[0]).hidden;
 
-            for (var i in clickedNode.descendants) {
-                var descendant = clickedNode.descendants[i];
+                for (var i in clickedNode.descendants) {
+                    var descendant = clickedNode.descendants[i];
 
-                var descNode = s.graph.nodes(descendant);
-                descNode.hidden = !hidden; 
+                    var descNode = s.graph.nodes(descendant);
+                    descNode.hidden = !hidden; 
+                }
             }
 
             s.refresh()
