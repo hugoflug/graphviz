@@ -6,6 +6,11 @@ from networkx.drawing.nx_agraph import graphviz_layout
 
 TREE_X_DISTANCE = 0.5
 
+def all_children(tree):
+    for subtree in tree["children"]:
+        yield subtree["label"]
+        yield from all_children(subtree)
+
 def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0):
     if len(subtree["children"]) > 0:
         new_tree_x_distance = tree_x_distance/len(subtree["children"])
@@ -23,7 +28,8 @@ def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0
             "communityNode": False,
             "color": color,
             "size": 1,
-            "hidden": False
+            "hidden": False,
+            "descendants": list(all_children(child))
         })
 
         out_json["edges"].append({
