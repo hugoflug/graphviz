@@ -66,7 +66,8 @@ def tree_layout(in_json):
             "communityNode": False,
             "color": community_color,
             "size": 1,
-            "hidden": False
+            "hidden": False,
+            "descendants": list(all_children(tree["root"]))
         })
         new_tree_x_distance = TREE_X_DISTANCE/len(tree["root"]["children"])
         add_subtree(tree["root"], tree["label"], out_json, community_color, x_position, new_tree_x_distance)

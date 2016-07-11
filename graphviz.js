@@ -25,8 +25,11 @@ function viz(s, jsonPath, config) {
             //s.startForceAtlas2({worker: true, barnesHutOptimize: false});
             //setTimeout(function() { s.stopForceAtlas2();  }, 15000);
 
-
-            clickCollapse(s);
+            if (config.treeCollapse === true) {
+                treeCollapse(s)
+            } else {
+                clickCollapse(s);
+            }
             colorEdges(s);
 
             s.settings({
@@ -173,7 +176,7 @@ function viz(s, jsonPath, config) {
             //locate intra-community nodes, color them a different color
             //build datastructure containing all intra-community nodes
 
-            clickedNode = e.data.node;
+            var clickedNode = e.data.node;
 
             if (clickedNode.communityNode === false) {
                 collapse(s, info, clickedNode);   
@@ -183,5 +186,25 @@ function viz(s, jsonPath, config) {
 
             s.refresh()
         });
+    }
+
+    function treeCollapse(s) {
+
+        s.bind('clickNode', function(e) {
+            //locate intra-community nodes, color them a different color
+            //build datastructure containing all intra-community nodes
+
+            var clickedNode = e.data.node;
+
+            for (var i in clickedNode.descendants) {
+                var descendant = clickedNode.descendants[i];
+
+                var descNode = s.graph.nodes(descendant);
+                descNode.hidden = !descNode.hidden; 
+                //descendant.hidden = !descendant.hidden;
+            }
+
+            s.refresh()
+        });        
     }
 } 
