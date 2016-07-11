@@ -200,7 +200,8 @@ function viz(s, jsonPath, config) {
                     var descendant = clickedNode.descendants[i];
 
                     var descNode = s.graph.nodes(descendant);
-                    descNode.hidden = !hidden; 
+                    descNode.hidden = !hidden;
+                    descNode.size = 1;
                 }
 
                 if (!hidden) {
