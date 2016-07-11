@@ -1,3 +1,4 @@
+
 sigma.classes.graph.addMethod('getEdgeId', function(from, to) {
     var allEdges = this.allNeighborsIndex[from][to];
     if (allEdges === undefined) {

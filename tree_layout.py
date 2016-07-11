@@ -15,7 +15,7 @@ def add_subtree(subtree, community, out_json, color, x, tree_x_distance, depth=0
 
         out_json["nodes"].append({
             "x": child_x,
-            "y": child["value"],
+            "y": -child["value"],
             "z": random.random(),
             "label": child["label"] + " (" + str(child["value"]) + ")",
             "id": child["label"],
@@ -43,7 +43,11 @@ def tree_layout(in_json):
     x_position = 1.0
 
     for tree in in_json["trees"]:
-        community_color = "rgb(" + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + "," + str(random.randint(0, 127)) + ")"
+        r = random.randint(0, 127)
+        g = random.randint(0, 127)
+        b = random.randint(0, 127)
+
+        community_color = "rgb(" + str(r) + "," + str(g) + "," + str(b) + ")"
 
         # add tree root
         out_json["nodes"].append({
