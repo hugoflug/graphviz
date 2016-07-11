@@ -190,8 +190,6 @@ function viz(s, jsonPath, config) {
 
     function treeCollapse(s) {
         s.bind('clickNode', function(e) {
-            //locate intra-community nodes, color them a different color
-            //build datastructure containing all intra-community nodes
 
             var clickedNode = e.data.node;
 
