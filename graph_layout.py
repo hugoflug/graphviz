@@ -24,7 +24,7 @@ def graph_layout(in_json):
         node["z"] = random.random()
         node["size"] = 1
         node["communityNode"] = False
-        node["id"] = node["label"]
+        node["id"] = node["id"] if "id" in node else node["label"]
         node["hidden"] = False
 
         if "community" in node and node["community"] not in communities:
