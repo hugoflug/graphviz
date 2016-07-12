@@ -39,6 +39,13 @@ def graph_layout(in_json):
         node["community"] = "comm_" + node["community"]
 
     for community in communities:
+        comm_names = [comm["label"] for comm in in_json["communities"] if comm["id"] == community]
+
+        if comm_names:
+            comm_name = comm_names[0]
+        else:
+            comm_name = community
+
         out_json["nodes"].append({
             "x": random.random(),
             "y": random.random(),
@@ -47,7 +54,7 @@ def graph_layout(in_json):
             "size": 3,
             "communityNode": True,
             "community": "comm_" + community,
-            "label": community,
+            "label": comm_name,
             "id": "comm_" + community,
             "hidden": True
         })
