@@ -191,6 +191,9 @@ function viz(s, jsonPath, config) {
     function treeCollapse(s) {
         s.bind('clickNode', function(e) {
 
+            cam = s.camera;
+            ss = s;
+
             var clickedNode = e.data.node;
 
             if (clickedNode.descendants.length > 0) {

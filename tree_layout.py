@@ -58,7 +58,7 @@ def tree_layout(in_json):
         # add tree root
         out_json["nodes"].append({
             "x": x_position,
-            "y": tree["root"]["value"],
+            "y": -tree["root"]["value"],
             "z": random.random(),
             "label": tree["root"]["label"] + " (" + str(tree["root"]["value"]) + ")",
             "id": tree["root"]["label"],
